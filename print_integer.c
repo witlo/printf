@@ -7,10 +7,10 @@
  */
 int _abs(int number)
 {
-	if (number < 0)
-		return (-1 * number);
-	else
-		return (number);
+    if (number < 0)
+        return (-1 * number);
+    else
+        return (number);
 }
 
 /**
@@ -20,44 +20,44 @@ int _abs(int number)
  */
 int num_digits(int number)
 {
-	int count = 0;
-	int num2 = number;
+    int count = 0;
+    int num2 = number;
 
-	if (number <= 0)
-		count += 1;
+    if (number <= 0)
+        count += 1;
 
-	while (_abs(num2) != 0)
-	{
-		num2 = num2 / 10;
-		count++;
-	}
-	return (count);
+    while (_abs(num2) != 0)
+    {
+        num2 = num2 / 10;
+        count++;
+    }
+    return (count);
 }
 
 /**
- * print_integer - prints an integer to the standard output.
+ * _print_integer - prints an integer to the standard output.
  * @number: the number to be printed.
  * Return: the count of digits printed.
  */
-int print_integer(char *format, va_list arguments)
+int _print_integer(int number)
 {
-	unsigned int unum;
-	int count;
+    unsigned int unum;
+    int count;
 
-	count = num_digits(number);
-	if (number < 0)
-	{
-		_putchar('-');
-		unum = -number;
-	}
-	else
-		unum = number;
+    count = num_digits(number);
+    if (number < 0)
+    {
+        _putchar('-');
+        unum = -number;
+    }
+    else
+        unum = number;
 
-	if (unum >= 10)
-		print_integer(unum / 10);
-	_putchar(unum % 10 + '0');
+    if (unum >= 10)
+        _print_integer(unum / 10);
+    _putchar(unum % 10 + '0');
 
-	return (count);
+    return (count);
 }
 
 /**
@@ -68,11 +68,11 @@ int print_integer(char *format, va_list arguments)
  */
 int print_integer(char *format, va_list arguments)
 {
-	int number = va_arg(arguments, int);
-	int num_chars;
-	(void)format;
+    int number = va_arg(arguments, int);
+    int num_chars;
+    (void)format;
 
-	num_chars = print_integer(number);
+    num_chars = _print_integer(number);
 
-	return (num_chars);
+    return (num_chars);
 }

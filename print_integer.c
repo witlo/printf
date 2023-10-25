@@ -39,7 +39,7 @@ int num_digits(int number)
  * @number: the number to be printed.
  * Return: the count of digits printed.
  */
-int print_integer(int number)
+int print_integer(char *format, va_list arguments)
 {
 	unsigned int unum;
 	int count;

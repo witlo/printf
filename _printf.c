@@ -1,66 +1,50 @@
 #include "main.h"
 
 /**
- * print_buffer - Prints buffer's content and resets index.
- * @buffer: Buffer containing chars to print.
- * @buff_ind: Index for next char in buffer.
+ * _printf - writes formatted data to stdout
+ * @format: string containing the required format to write
+ * Return: the count of characters written
  */
-void print_buffer(char buffer[], int *buff_ind);
-
-/**
- * _printf - Custom printf function to format and print data.
- * @format: Format string for output.
- * 
- * Returns: Total chars printed, excluding null byte.
- */
-int _printf(const char *format, ...)
+int _printf(char *format, ...)
 {
-	int i, printed = 0, printed_chars = 0;
-	int flags, width, precision, size, buff_ind = 0;
-	va_list list;
-	char buffer[BUFF_SIZE];
+	int char_count = 0, (*function)(char *, va_list);
+	char specifier[3];
+	va_list arg_list;
 
 	if (format == NULL)
 		return (-1);
-
-	va_start(list, format);
-	for (i = 0; format && format[i] != '\0'; i++)
+	specifier[2] = '\0';
+	va_start(arg_list, format);
+	_putchar(-1);
+	while (format[0])
 	{
-		if (format[i] != '%')
+		if (format[0] == '%')
 		{
-			buffer[buff_ind++] = format[i];
-			if (buff_ind == BUFF_SIZE)
-				print_buffer(buffer, &buff_ind);
-			printed_chars++;
+			function = get_function(format);
+			if (function)
+			{
+				specifier[0] = '%';
+				specifier[1] = format[1];
+				char_count += function(specifier, arg_list);
+			}
+			else if (format[1] != '\0')
+			{
+				char_count += _putchar('%');
+				char_count += _putchar(format[1]);
+			}
+			else
+			{
+				char_count += _putchar('%');
+				break;
+			}
+			format += 2;
 		}
 		else
 		{
-			print_buffer(buffer, &buff_ind);
-			flags = get_flags(format, &i);
-			width = get_width(format, &i, list);
-			precision = get_precision(format, &i, list);
-			size = get_size(format, &i);
-			++i;
-			printed = handle_print(format, &i, list, buffer,
-				flags, width, precision, size);
-			if (printed == -1)
-				return (-1);
-			printed_chars += printed;
+			char_count += _putchar(format[0]);
+			format++;
 		}
 	}
-
-	print_buffer(buffer, &buff_ind);
-
-	va_end(list);
-
-	return (printed_chars);
+	_putchar(-2);
+	return (char_count);
 }
-
-void print_buffer(char buffer[], int *buff_ind)
-{
-	if (*buff_ind > 0)
-		write(1, &buffer[0], *buff_ind);
-
-	*buff_ind = 0;
-}
-
